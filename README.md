@@ -14,7 +14,7 @@
 Via Composer
 
 ``` bash
-$ composer require league/skeleton
+$ composer require phirational/laravel-geoip2
 ```
 
 ``` php
