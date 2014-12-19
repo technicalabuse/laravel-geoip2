@@ -51,6 +51,14 @@ class GeoIP2
         $this->userId = $this->config->get('laravel-geoip2::config.user_id');
         $this->licenseKey = $this->config->get('laravel-geoip2::config.license_key');
 
+        $this->init();
+    }
+
+    /**
+     * Initialization of providers
+     */
+    public function init()
+    {
         // Init API Provider when database is not used
         if (empty($this->databases)) {
             $this->provider = new Client($this->userId, $this->licenseKey);
@@ -64,6 +72,14 @@ class GeoIP2
         );
     }
 
+    /**
+     * Forward method calls to provider
+     *
+     * @param string $name
+     * @param array $arguments
+     *
+     * @return mixed
+     */
     public function __call($name, $arguments)
     {
         $ip = $this->request->getClientIp();
