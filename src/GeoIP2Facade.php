@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Facade;
  *
  * @package Phirational\LaravelGeoIP2
  *
- * @method \GeoIp2\Model\AnonymousIp    anonymousIp(string $ipAddress)
- * @method \GeoIp2\Model\City           city(string $ipAddress)
- * @method \GeoIp2\Model\ConnectionType connectionType(string $ipAddress)
- * @method \GeoIp2\Model\Country        country(string $ipAddress)
- * @method \GeoIp2\Model\Domain         domain(string $ipAddress)
- * @method \GeoIp2\Model\Insights       insights(string $ipAddress)
- * @method \GeoIp2\Model\Isp            isp(string $ipAddress)
+ * @method static \GeoIp2\Model\AnonymousIp    anonymousIp(string $ipAddress)
+ * @method static \GeoIp2\Model\City           city(string $ipAddress)
+ * @method static \GeoIp2\Model\ConnectionType connectionType(string $ipAddress)
+ * @method static \GeoIp2\Model\Country        country(string $ipAddress)
+ * @method static \GeoIp2\Model\Domain         domain(string $ipAddress)
+ * @method static \GeoIp2\Model\Insights       insights(string $ipAddress)
+ * @method static \GeoIp2\Model\Isp            isp(string $ipAddress)
  */
 class GeoIP2Facade extends Facade
 {
