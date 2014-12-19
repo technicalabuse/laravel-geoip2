@@ -1,29 +1,36 @@
 <?php
 namespace Phirational\LaravelGeoIP2;
 
-use GeoIp2\Database\Reader;
 use GeoIp2\WebService\Client;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Http\Request;
+use Phirational\LaravelGeoIP2\Provider\DatabaseProvider;
+use Phirational\LaravelGeoIP2\Provider\LocalhostProvider;
 
 /**
  * Class GeoIP2
  *
  * @package Phirational\LaravelGeoIP2
+ *
+ * @method \GeoIp2\Model\City city($ipAddress)
+ * @method \GeoIp2\Model\Country country($ipAddress)
  */
 class GeoIP2
 {
     /** @var \Illuminate\Config\Repository */
-    protected $config;
+    private $config;
 
     /** @var \Illuminate\Http\Request */
-    protected $request;
-
-    protected $storagePath;
-    protected $database;
+    private $request;
 
     /** @var \GeoIp2\ProviderInterface */
-    protected $provider;
+    private $provider;
+
+    /** @var \Phirational\LaravelGeoIP2\Provider\LocalhostProvider */
+    private $localhostProvider;
+
+    protected $storagePath;
+    protected $databases;
 
     private $userId;
     private $licenseKey;
@@ -33,17 +40,28 @@ class GeoIP2
         $this->config = $config;
         $this->request = $request;
 
-        $this->storagePath = realpath($this->config->get('laravel-geoip2::config.storagePath', storage_path('geoip')));
-        $this->database = $this->config->get('laravel-geoip2::config.database');
-
-        $this->userId = $this->config->get('laravel-geoip2::config.userId');
-        $this->licenseKey = $this->config->get('laravel-geoip2::config.licenseKey');
-
-        if (!empty($this->database)) {
-            $this->provider = new Reader(sprintf('%s/%s', $this->storagePath, $this->database));
-        } else {
-            $this->provider = new Client($this->userId, $this->licenseKey);
+        $cfgStoragePath = $this->config->get('laravel-geoip2::config.storage_path');
+        if (empty($cfgStoragePath)) {
+            $cfgStoragePath = storage_path('geoip');
         }
+
+        $this->storagePath = realpath($cfgStoragePath);
+        $this->databases = $this->config->get('laravel-geoip2::config.databases');
+
+        $this->userId = $this->config->get('laravel-geoip2::config.user_id');
+        $this->licenseKey = $this->config->get('laravel-geoip2::config.license_key');
+
+        // Init API Provider when database is not used
+        if (empty($this->databases)) {
+            $this->provider = new Client($this->userId, $this->licenseKey);
+        } else {
+            $this->provider = new DatabaseProvider($this->storagePath, $this->databases);
+        }
+
+        $this->localhostProvider = new LocalhostProvider(
+            $this->config->get('laravel-geoip2::config.localhost_addresses', []),
+            $this->config->get('laravel-geoip2::config.localhost_raw_data', [])
+        );
     }
 
     public function __call($name, $arguments)
@@ -53,6 +71,10 @@ class GeoIP2
             $ip = array_shift($arguments);
         }
 
-        return call_user_func(array($this->provider, $name), $ip);
+        if ($this->localhostProvider->isLocalhost($ip)) {
+            return $this->localhostProvider->$name($ip);
+        }
+
+        return $this->provider->$name($ip);
     }
 }
