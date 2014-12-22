@@ -12,13 +12,13 @@ use Phirational\LaravelGeoIP2\Provider\LocalhostProvider;
  *
  * @package Phirational\LaravelGeoIP2
  *
- * @method \GeoIp2\Model\AnonymousIp    anonymousIp(string $ipAddress)
- * @method \GeoIp2\Model\City           city(string $ipAddress)
- * @method \GeoIp2\Model\ConnectionType connectionType(string $ipAddress)
- * @method \GeoIp2\Model\Country        country(string $ipAddress)
- * @method \GeoIp2\Model\Domain         domain(string $ipAddress)
- * @method \GeoIp2\Model\Insights       insights(string $ipAddress)
- * @method \GeoIp2\Model\Isp            isp(string $ipAddress)
+ * @method \GeoIp2\Model\AnonymousIp    anonymousIp(string $ipAddress = null)
+ * @method \GeoIp2\Model\City           city(string $ipAddress = null)
+ * @method \GeoIp2\Model\ConnectionType connectionType(string $ipAddress = null)
+ * @method \GeoIp2\Model\Country        country(string $ipAddress = null)
+ * @method \GeoIp2\Model\Domain         domain(string $ipAddress = null)
+ * @method \GeoIp2\Model\Insights       insights(string $ipAddress = null)
+ * @method \GeoIp2\Model\Isp            isp(string $ipAddress = null)
  */
 class GeoIP2
 {
