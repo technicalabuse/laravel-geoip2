@@ -11,6 +11,12 @@ return array(
     'user_id'     => 999999,
     'license_key' => '000000000000',
 
+    // String Product IDs with optional filenames
+    'products' => array(
+        'GeoLite2-City' => 'GeoLite2-City.mmdb',
+        'GeoLite2-Country',
+    ),
+
     // RFC 5735 Special Use IPv4 Addresses
     'localhost_addresses' => array(
         '0.0.0.0/8',
