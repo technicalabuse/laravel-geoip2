@@ -41,6 +41,11 @@ class GeoIP2Update
             $cfgStoragePath = storage_path('geoip');
         }
 
+        if (!file_exists($cfgStoragePath))
+        {
+            mkdir($cfgStoragePath, 0777, true);
+        }
+
         $this->storagePath = realpath($cfgStoragePath);
         $this->products = $this->config->get('laravel-geoip2::config.products');
 
@@ -55,11 +60,6 @@ class GeoIP2Update
 
     public function update()
     {
-        if (!file_exists($this->storagePath))
-        {
-            mkdir($this->storagePath, 0777, true);
-        }
-
         $errors = 0;
         foreach ($this->products as $productId => $filename)
         {
